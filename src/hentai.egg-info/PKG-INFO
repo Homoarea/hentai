@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: hentai
+Version: 0.1
+Requires-Dist: click
+Requires-Dist: requests
+Requires-Dist: chardet
+Requires-Dist: beautifulsoup4
+Requires-Dist: lxml
+Dynamic: requires-dist
