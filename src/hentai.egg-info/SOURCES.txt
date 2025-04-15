@@ -1,3 +1,5 @@
+LICENSE
+NOTICE
 README.md
 setup.py
 src/hentai/__init__.py

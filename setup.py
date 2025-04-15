@@ -36,6 +36,6 @@ setup(
         eh=hentai.eh:cli
     """,
     project_urls={
-        "Source":"https://github.com/homoarea/hentai"
+        "Source":"https://github.com/Homoarea/hentai"
     }
 )
