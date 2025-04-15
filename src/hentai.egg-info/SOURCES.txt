@@ -2,11 +2,11 @@ LICENSE
 NOTICE
 README.md
 setup.py
-src/hentai/__init__.py
-src/hentai/__version__.py
-src/hentai/conf.py
-src/hentai/eh.py
-src/hentai/fetch.py
+src/ehentai/__init__.py
+src/ehentai/__version__.py
+src/ehentai/conf.py
+src/ehentai/eh.py
+src/ehentai/fetch.py
 src/hentai.egg-info/PKG-INFO
 src/hentai.egg-info/SOURCES.txt
 src/hentai.egg-info/dependency_links.txt

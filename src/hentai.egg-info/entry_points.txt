@@ -1,2 +1,2 @@
 [console_scripts]
-eh = hentai.eh:cli
+eh = ehentai.eh:cli

@@ -1,5 +1,5 @@
 from enum import Enum,unique
-from hentai.__version__ import __version__
+from ehentai.__version__ import __version__
 @unique
 class CATS(Enum):
     Doujinshi=1021

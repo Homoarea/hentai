@@ -5,7 +5,7 @@ Summary: Python for viewing e-hentai
 Home-page: https://github.com/Homoarea/hentai
 Author: Homoarea
 Author-email: homoarea114@gmail.com
-License: GPLv3
+License: GNU GPLv3
 Project-URL: Source, https://github.com/Homoarea/hentai
 Requires-Python: >=3.8
 License-File: LICENSE

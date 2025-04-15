@@ -12,7 +12,7 @@ requires=[
 
 about={}
 here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here,'src','hentai','__version__.py'),'r','utf-8') as f:
+with open(os.path.join(here,'src','ehentai','__version__.py'),'r','utf-8') as f:
     exec(f.read(),about)
 print(about)
 
@@ -25,7 +25,7 @@ setup(
     url=about["__url__"],
     license=about["__license__"],
 
-    packages=["hentai"],
+    packages=["ehentai"],
     package_dir={"":"src"},
     package_data={"":["LICENSE","NOTICE"]},
     include_package_data=True,
@@ -33,7 +33,7 @@ setup(
     install_requires=requires,
     entry_points="""
         [console_scripts]
-        eh=hentai.eh:cli
+        eh=ehentai.eh:cli
     """,
     project_urls={
         "Source":"https://github.com/Homoarea/hentai"

@@ -6,10 +6,10 @@ import click
 import json
 from click import echo
 from typing import List
-from hentai.fetch import get_sp,Page,Gallery,url
-from hentai import fetch
-from hentai.conf import *
-from hentai import __version__
+from ehentai.fetch import get_sp,Page,Gallery,url
+from ehentai import fetch
+from ehentai.conf import *
+from ehentai import __version__
 HOME=os.path.abspath(os.path.join(os.getenv('HOME'),".hentai"))
 
 if not os.path.exists(HOME):

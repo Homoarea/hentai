@@ -13,5 +13,5 @@ __url__="https://github.com/Homoarea/hentai"
 __build__=0x3f3f3f
 __author__="Homoarea"
 __author_email__="homoarea114@gmail.com"
-__license__="GPLv3"
+__license__="GNU GPLv3"
 __copyright__="Copyright Homoarea"

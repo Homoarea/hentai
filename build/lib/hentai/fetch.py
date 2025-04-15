@@ -3,7 +3,7 @@ import requests
 import chardet
 from bs4 import BeautifulSoup
 import os
-from hentai.conf import *
+from ehentai.conf import *
 # book
 class Gallery:
     name=""#名字
