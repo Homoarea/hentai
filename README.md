@@ -1,14 +1,14 @@
-# hentai
-**hentai** is a simple cli for view e-hentai.org
+# ehentai
+this is a simple cli for view e-hentai.org
 
 ## Quickstart
 ### Using cli
 ```
-pip install hentai
+pip install ehentai
 
-hentai --help
+eh --help
 ```
 ### python code
 ```
-form hentai import fetch
+
 ```
