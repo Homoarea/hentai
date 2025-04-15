@@ -1,0 +1,15 @@
+LICENSE
+NOTICE
+README.md
+setup.py
+src/ehentai/__init__.py
+src/ehentai/__version__.py
+src/ehentai/conf.py
+src/ehentai/eh.py
+src/ehentai/fetch.py
+src/ehentai.egg-info/PKG-INFO
+src/ehentai.egg-info/SOURCES.txt
+src/ehentai.egg-info/dependency_links.txt
+src/ehentai.egg-info/entry_points.txt
+src/ehentai.egg-info/requires.txt
+src/ehentai.egg-info/top_level.txt

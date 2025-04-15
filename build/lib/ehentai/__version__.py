@@ -6,7 +6,7 @@
 ██║  ██║███████╗██║ ╚████║   ██║   ██║  ██║██║
 ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚═╝
 """
-__title__="hentai"
+__title__="ehentai"
 __description__="Python for viewing e-hentai"
 __version__="0.1"
 __url__="https://github.com/Homoarea/hentai"
