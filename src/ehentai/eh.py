@@ -1,15 +1,17 @@
 import sys
-import pickle
 import os
 import json
 import click
 import json
 from click import echo
 from typing import List
-from ehentai.fetch import get_sp,Page,Gallery,URL
-from ehentai import fetch
+from ehentai.fetch import Page,Gallery
 from ehentai.conf import *
 from ehentai import __version__
+from ehentai.utils.connect import URL, get_f_cats, get_sp, keyword
+
+
+
 HOME=os.path.abspath(os.path.join(os.getenv('HOME'),".hentai"))
 
 if not os.path.exists(HOME):
@@ -62,9 +64,9 @@ def search(search_text,cats,rating,show_expunged,show_torrent):
     page = Page(
         get_sp(
             URL,
-            params=fetch.keyword(
+            params=keyword(
                 f_search=search_text,
-                f_cats=fetch.get_f_cats(cats),
+                f_cats=get_f_cats(cats),
                 f_srdd=rating,
                 f_sh=show_expunged,
                 f_sto=show_torrent,
@@ -115,5 +117,4 @@ def popular():
 @click.option('--params','-p',default=None)
 def t(params):
     echo(params if params else "DEFAULT")
-    echo(fetch.get_f_cats())
     pass
