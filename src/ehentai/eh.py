@@ -6,7 +6,7 @@ import click
 import json
 from click import echo
 from typing import List
-from ehentai.fetch import get_sp,Page,Gallery,url
+from ehentai.fetch import get_sp,Page,Gallery,URL
 from ehentai import fetch
 from ehentai.conf import *
 from ehentai import __version__
@@ -40,12 +40,6 @@ page: Page
 @click.group()
 def cli():
     pass
-# testing
-# @cli.command()
-# @click.option('--params','-p',default=None)
-# def t(params):
-#     echo(params if params else "DEFAULT")
-#     pass
 @cli.command(help="|show the version")
 def version():
     echo(f"""{FONT_COLOR.pink.value}
@@ -67,7 +61,7 @@ def version():
 def search(search_text,cats,rating,show_expunged,show_torrent):
     page = Page(
         get_sp(
-            url,
+            URL,
             params=fetch.keyword(
                 f_search=search_text,
                 f_cats=fetch.get_f_cats(cats),
@@ -115,3 +109,11 @@ def popular():
     page=Page(get_sp("https://e-hentai.org/popular"))
     echo(f"Currently Popular Recent Galleries:{len(page.gl_table)}")
     save_json("page.json",page)
+
+# testing
+@cli.command()
+@click.option('--params','-p',default=None)
+def t(params):
+    echo(params if params else "DEFAULT")
+    echo(fetch.get_f_cats())
+    pass

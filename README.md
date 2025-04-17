@@ -14,10 +14,10 @@ eh --help
 ```
 
 ## TODO
+- [ ] fetch torrent
 - [ ] login
-- [ ] DNS
+- [ ] Hosts
 - [ ] SNI
-- [ ] torrent download
 - [ ] multi-threaded download
 - [ ] More file packaging formats
   

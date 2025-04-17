@@ -183,15 +183,20 @@ def get_sp(url: str,params=None,encoding=None):
 
 
 # switch categories: doujinshi...
-def get_f_cats(cat_code=0b0011111111):
+def get_f_cats(cat_code=0b0011111111,cats: list=None):
     res=0b1111111111
+    if cats:
+        for v in list(i.value for i in cats):
+            res&=v
+        return res
+    
     for v in list(i.value for i in CATS):
         if cat_code&1:res&=v
         cat_code>>=1
     return res
 
 
-url="https://e-hentai.org/"
+URL="https://e-hentai.org/"
 
 headers={
     "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
