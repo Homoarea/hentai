@@ -1,9 +1,36 @@
 from bs4 import BeautifulSoup
 import chardet
 import requests
-
 from ehentai.conf import CATS
 
+DOMAIN="e-hentai.org"
+URL="https://e-hentai.org/"
+
+headers={
+    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+    "Referer":"http://www.google.com",
+}
+
+hosts=["104.20.19.168", "172.67.2.238", "104.20.18.168"]
+
+def get_response(url: str,direct: bool=False,hosts=hosts,headers=headers,params=None)->requests.Response:
+    if direct:
+        return requests.get(url,params=params,headers=headers)
+    else:
+        try:
+            headers['Host']=DOMAIN
+            requests.packages.urllib3.disable_warnings()
+            for i in range(10):
+                for ip in hosts:
+                    response=requests.get(
+                        url=f"https://{ip}",params=params,headers=headers,verify=False,
+                    )
+                    if response.ok:
+                        return response
+        except Exception as e:
+            print(e,"fetch again")
+                
+        pass
 
 def keyword(
     f_search: str = None,
@@ -50,16 +77,17 @@ def next_view(sp: BeautifulSoup):
 
 # url:target_URL
 # parms:search_keyword
-def get_sp(url: str,params=None,encoding=None):
+def get_sp(url: str,params=None,direct=False,encoding=None):
     # set encoding
-    respone=requests.get(url,headers=headers,params=params)
-    if encoding:
-        respone.encoding=encoding
-    else:
-        encoding=chardet.detect(respone.content)["encoding"]
-        respone.encoding=encoding
+    response=get_response(url,direct,params=params)
 
-    return BeautifulSoup(respone.text,"lxml")
+    if encoding:
+        response.encoding=encoding
+    else:
+        encoding=chardet.detect(response.content)["encoding"]
+        response.encoding=encoding
+
+    return BeautifulSoup(response.text,"lxml")
 
 
 # switch categories: doujinshi...
@@ -75,10 +103,3 @@ def get_f_cats(cat_code=0b0011111111,cats: list=None):
         cat_code>>=1
     return res
 
-
-URL="https://e-hentai.org/"
-
-headers={
-    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-    "Referer":"http://www.google.com",
-}

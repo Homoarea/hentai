@@ -55,17 +55,17 @@ def version():
     echo(f"Version: {__version__.__version__}")
     
 @cli.command(help="|search from e-hentai")
-@click.option('--search-text','-s',default="",prompt=True,help="search content,tags")
+@click.option('--search-content','-s',default="",prompt=True,help="search content,tags")
 @click.option('--cats','-c',default=255,type=int,help="Doujinshi,Manga...")
 @click.option('--rating','-r',default=None,type=int,help="the minium rating")
 @click.option('--show-expunged/--no-show-expunged','-sh',default=False,help="show the removed galleries")
 @click.option('--show-torrent/--no-show-torrent','-sto',default=False,help="filter galleries have torrent")
-def search(search_text,cats,rating,show_expunged,show_torrent):
+def search(search_content,cats,rating,show_expunged,show_torrent):
     page = Page(
         get_sp(
             URL,
             params=keyword(
-                f_search=search_text,
+                f_search=search_content,
                 f_cats=get_f_cats(cats),
                 f_srdd=rating,
                 f_sh=show_expunged,
@@ -74,6 +74,7 @@ def search(search_text,cats,rating,show_expunged,show_torrent):
         )
     )
     save_json("page.json",page)
+    print(page)
 
 @cli.command(help="|show the fetched galleries")
 @click.option("--detailed/--no-detailed", "-d/", default=False)
