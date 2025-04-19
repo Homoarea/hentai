@@ -1,5 +1,5 @@
 from ehentai.fetch import Gallery,Page
-from ehentai.utils.connect import URL, get_sp, keyword
+from ehentai.connect import URL, get_sp, keyword
 
 def get_Page(url: str=URL,params=None,encoding: str=None,direct: bool=False)->Page:
     """

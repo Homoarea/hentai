@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import os
 from ehentai.conf import FONT_STYLE,CATS_BG_COLOR,RESET
-from ehentai.utils.connect import get_sp,next_view,get_response
+from ehentai.connect import get_sp,next_view,get_response
 # book
 class Gallery:
     name=""#名字
