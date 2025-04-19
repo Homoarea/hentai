@@ -1,10 +1,11 @@
 from bs4 import BeautifulSoup
-import chardet
-import requests
+import time
 from ehentai.conf import CATS
+from curl_cffi import requests
+import asyncio
 
 DOMAIN="e-hentai.org"
-URL="https://e-hentai.org/"
+URL="https://e-hentai.org"
 
 headers={
     "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
@@ -13,24 +14,37 @@ headers={
 
 hosts=["104.20.19.168", "172.67.2.238", "104.20.18.168"]
 
-def get_response(url: str,direct: bool=False,hosts=hosts,headers=headers,params=None)->requests.Response:
-    if direct:
-        return requests.get(url,params=params,headers=headers)
-    else:
-        try:
-            headers['Host']=DOMAIN
-            requests.packages.urllib3.disable_warnings()
-            for i in range(10):
-                for ip in hosts:
-                    response=requests.get(
-                        url=f"https://{ip}",params=params,headers=headers,verify=False,
-                    )
-                    if response.ok:
-                        return response
-        except Exception as e:
-            print(e,"fetch again")
-                
-        pass
+def get_response(url: str,direct: bool=False,hosts=hosts,headers=headers,params=None,**args)->requests.Response:
+    
+    if not direct:
+        for ip in hosts:
+            if url.find(DOMAIN)!=-1:
+                headers['Host']=DOMAIN
+                url=url[:url.find(DOMAIN)]+ip+url[url.find(DOMAIN)+len(DOMAIN):]
+            try:
+                print(url)
+                response = requests.get(
+                    url,
+                    params=params,
+                    impersonate="chrome",
+                    headers=headers,
+                    verify=False,
+                    **args,
+                )
+
+                if response.ok:
+                    return response
+            except requests.exceptions.ConnectionError as e:
+                time.sleep(1)
+                print("fetch again..")
+            except requests.exceptions.ReadTimeout as e:
+                time.sleep(1)
+                print("fetch again..")
+            except Exception as e:
+                time.sleep(1)
+                print("fetch again..")
+
+    return requests.get(url,params=params,headers=headers,impersonate="chrome",timeout=27.03,**args)
 
 def keyword(
     f_search: str = None,
@@ -44,32 +58,33 @@ def keyword(
     f_sfl: bool = None,
     f_sfu: bool = None,
     f_sft: bool = None,
+    cats_list=None
 ):
-
-    return {
-        # search_kw
-        "f_search":f_search,
-        # category
-        "f_cats":f_cats,
-        # advanced search
-        # show advanced options
-        "advsearch":1 if advsearch or f_sh or f_sto or f_spf or f_spt or f_srdd or f_sfl or f_sfu or f_sft else None,
-        # show expunged galleries
-        "f_sh":"on" if f_sh else None,
-        # require Gallery torrent
-        "f_sto":"on" if f_sto else None,
-        # between {f_spf} and {f_spt} Pages
-        "f_spf":f_spf,
-        "f_spt":f_spt,
-        # minimum_rating
-        "f_srdd":f_srdd,
-        # disable filter language
-        "f_sfl":"on" if f_sfl else None,
-        # disable filter uploader
-        "f_sfu":"on" if f_sfu else None,
-        # disable filter tags
-        "f_sft":"on" if f_sft else None,
-    }
+    kw={}
+    # search_kw
+    kw["f_search"]=f_search
+    # category
+    if f_cats or cats_list:kw["f_cats"]=get_f_cats(f_cats,cats_list),
+    # advanced search
+    # show advanced options
+    if advsearch or f_sh or f_sto or f_spf or f_spt or f_srdd or f_sfl or f_sfu or f_sft:kw["advsearch"]=1
+    # show expunged galleries
+    if f_sh:kw["f_sh"]="on"
+    # require Gallery torrent
+    if f_sto:kw["f_sto"]="on"
+    # between {f_spf} and {f_spt} Pages
+    if f_spf:kw["f_spf"]=f_spf,
+    if f_spt:kw["f_spt"]=f_spt,
+    # minimum_rating
+    if f_srdd:kw["f_srdd"]=f_srdd,
+    # disable filter language
+    if f_sfl:kw["f_sfl"]="on"
+    # disable filter uploader
+    if f_sfu:kw["f_sfu"]="on"
+    # disable filter tags
+    if f_sft:kw["f_sft"]="on"
+    
+    return kw
 
 
 def next_view(sp: BeautifulSoup):
@@ -77,21 +92,23 @@ def next_view(sp: BeautifulSoup):
 
 # url:target_URL
 # parms:search_keyword
-def get_sp(url: str,params=None,direct=False,encoding=None):
+def get_sp(url: str,params=None,encoding=None,direct=False)->BeautifulSoup:
     # set encoding
     response=get_response(url,direct,params=params)
 
     if encoding:
         response.encoding=encoding
-    else:
-        encoding=chardet.detect(response.content)["encoding"]
-        response.encoding=encoding
 
+    # response info
+    # print(response.encoding)
+    # print(response.url)
+    
     return BeautifulSoup(response.text,"lxml")
 
 
 # switch categories: doujinshi...
-def get_f_cats(cat_code=0b0011111111,cats: list=None):
+def get_f_cats(cat_code=None,cats: list=None):
+    cat_code=cat_code if cat_code else 0b0011111111
     res=0b1111111111
     if cats:
         for v in list(i.value for i in cats):
@@ -102,4 +119,3 @@ def get_f_cats(cat_code=0b0011111111,cats: list=None):
         if cat_code&1:res&=v
         cat_code>>=1
     return res
-

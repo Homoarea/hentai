@@ -1,9 +1,7 @@
-import requests
 from bs4 import BeautifulSoup
 import os
 from ehentai.conf import FONT_STYLE,CATS_BG_COLOR,RESET
-
-from ehentai.utils.connect import get_sp,next_view,headers
+from ehentai.utils.connect import get_sp,next_view,get_response
 # book
 class Gallery:
     name=""#名字
@@ -25,7 +23,7 @@ class Gallery:
     def __repr__(self):
         return f"<{self.name}>"
     
-    def download(self,name=None,path=None,img_suffix="webp",show=True):
+    def download(self,name=None,path=None,img_suffix="webp",show=True,chunk_size=8192):
         if show:
             print("fetching the URL...")
         path=path if path else "./"
@@ -43,7 +41,7 @@ class Gallery:
             print(f"Totals:{totals}")
 
         fdir=os.path.join(path,name if name else self.name)
-        os.makedirs(fdir)
+        os.makedirs(fdir) if not os.path.exists(fdir) else None
 
         for i,v in enumerate(images):
 
@@ -51,10 +49,13 @@ class Gallery:
                 print(f"Downloading...{i+1}/{totals}")
 
             img_src=get_sp(v).find('img',id="img").get('src')
-            img=requests.get(img_src,headers=headers)
+            img=get_response(img_src,stream=True)
             with open(os.path.join(fdir,f"{i}.{img_suffix}"),"wb") as f:
-                f.write(img.content)
-        
+                for chunk in img.iter_content(chunk_size=chunk_size):
+                    if chunk:
+                        f.write(chunk)
+                        f.flush()
+            
         if show:
             print("Completed!!")
     

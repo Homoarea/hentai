@@ -16,13 +16,12 @@ eh --help
 ## TODO
 - [ ] fetch torrent
 - [ ] login
-- [ ] Hosts
-- [ ] SNI
+- [x] SNI
 - [ ] multi-threaded download
 - [ ] More file packaging formats
   
 
 ## Using
-[requests](https://github.com/psf/requests)     
+[curl_cffi](https://github.com/lexiforest/curl_cffi/)     
 [click](https://github.com/pallets/click)       
 [bs4](https://pypi.org/project/beautifulsoup4/)     
