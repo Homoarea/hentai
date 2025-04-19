@@ -10,7 +10,10 @@ eh --help
 ```
 ### python code
 ```
-
+import ehentai
+page=ehentai.get_popular()
+for gl in page.gl_table:
+    print(gl)
 ```
 
 ## TODO

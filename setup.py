@@ -4,8 +4,7 @@ from setuptools import setup
 
 requires=[
     "click",
-    "requests",
-    "chardet",
+    "curl_cffi",
     "beautifulsoup4",
     "lxml",
 ]

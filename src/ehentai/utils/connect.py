@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 import time
 from ehentai.conf import CATS
 from curl_cffi import requests
-import asyncio
 
 DOMAIN="e-hentai.org"
 URL="https://e-hentai.org"
