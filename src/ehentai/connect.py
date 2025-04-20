@@ -3,12 +3,14 @@ import time
 from ehentai.conf import CATS
 from curl_cffi import requests
 
-DOMAIN="e-hentai.org"
-URL="https://e-hentai.org"
+DOMAIN_E="e-hentai.org"
+URL_E="https://e-hentai.org"
 
 headers={
-    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
     "Referer":"http://www.google.com",
+    "Accept":"image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+    "Accept-Language":"zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7"
 }
 
 hosts=["104.20.19.168", "172.67.2.238", "104.20.18.168"]
@@ -17,11 +19,11 @@ def get_response(url: str,direct: bool=False,hosts=hosts,headers=headers,params=
     
     if not direct:
         for ip in hosts:
-            if url.find(DOMAIN)!=-1:
-                headers['Host']=DOMAIN
-                url=url[:url.find(DOMAIN)]+ip+url[url.find(DOMAIN)+len(DOMAIN):]
+            if url.find(DOMAIN_E)!=-1:
+                domain=url.split('/')[2]
+                headers['Host']=domain
+                url=f"{url[:url.find(domain)]}{ip}{url[url.find(domain)+len(domain):]}"
             try:
-                print(url)
                 response = requests.get(
                     url,
                     params=params,

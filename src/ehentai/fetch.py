@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import os
 from ehentai.conf import FONT_STYLE,CATS_BG_COLOR,RESET
 from ehentai.connect import get_sp,next_view,get_response
+import time
 # book
 class Gallery:
     name=""#名字
@@ -23,7 +24,8 @@ class Gallery:
     def __repr__(self):
         return f"<{self.name}>"
     
-    def download(self,name=None,path=None,img_suffix="webp",show=True,chunk_size=8192):
+    def download(self,name=None,path=None,img_suffix="webp",show=True,stream=True,chunk_size=8192):
+        start_time=time.time()
         if show:
             print("fetching the URL...")
         path=path if path else "./"
@@ -49,15 +51,18 @@ class Gallery:
                 print(f"Downloading...{i+1}/{totals}")
 
             img_src=get_sp(v).find('img',id="img").get('src')
-            img=get_response(img_src,stream=True)
+            img=get_response(img_src,stream=stream)
             with open(os.path.join(fdir,f"{i}.{img_suffix}"),"wb") as f:
-                for chunk in img.iter_content(chunk_size=chunk_size):
-                    if chunk:
-                        f.write(chunk)
-                        f.flush()
+                if stream:
+                    for chunk in img.iter_content(chunk_size=chunk_size):
+                        if chunk:
+                            f.write(chunk)
+                            f.flush()
+                else:
+                    f.write(img.content)
             
         if show:
-            print("Completed!!")
+            print(f"Completed!! consum:{time.time()-start_time}")
     
     # @return:list(author,list[str])
     def comment(self):

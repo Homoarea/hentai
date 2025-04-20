@@ -74,13 +74,14 @@ def list(detailed):
 @click.option('--download/--no-download','-d/',default=False,help="select this to download gallery")
 @click.option('--rename',default=None,type=str,help="rename gallery when download")
 @click.option('--path','-p',default=None,type=click.Path(),help="download path,default is current directory")
+@click.option('--stream/--no-stream','-s/',default=True,type=bool,help="enable stream download")
 @click.option('--comment/--no-comment', '-c/',default=False,help="echo the comment of gallery")
-def view(id,download,rename,path,comment):
+def view(id,download,rename,path,stream,comment):
     page=load_json("page.json",Page)
     gl=page.gl_table[id]
     echo(gl)
     if download:
-        gl.download(name=rename,path=path)
+        gl.download(name=rename,path=path,stream=stream)
     elif comment:
         comment=gl.comment()
         if comment:
@@ -99,8 +100,8 @@ def popular(use_direct):
     save_json("page.json",page)
 
 # testing
-@cli.command()
-@click.option('--params','-p',default=None)
-def t(params):
-    echo(params if params else "DEFAULT")
-    pass
+# @cli.command()
+# @click.option('--params','-p',default=None)
+# def t(params):
+#     echo(params if params else "DEFAULT")
+#     pass
