@@ -15,7 +15,7 @@ headers={
 
 hosts=["104.20.19.168", "172.67.2.238", "104.20.18.168"]
 
-def get_response(url: str,direct: bool=False,hosts=hosts,headers=headers,params=None,**args)->requests.Response:
+def get_response(url: str,direct: bool=False,hosts=hosts,headers=headers,params=None,timeout=6.1,**args)->requests.Response:
     
     if not direct:
         for ip in hosts:
@@ -30,6 +30,7 @@ def get_response(url: str,direct: bool=False,hosts=hosts,headers=headers,params=
                     impersonate="chrome",
                     headers=headers,
                     verify=False,
+                    timeout=timeout,
                     **args,
                 )
 
@@ -37,15 +38,18 @@ def get_response(url: str,direct: bool=False,hosts=hosts,headers=headers,params=
                     return response
             except requests.exceptions.ConnectionError as e:
                 time.sleep(1)
-                print("fetch again..")
+                print("fetch again..",type(e))
+            except requests.exceptions.RequestException as e:
+                time.sleep(1)
+                print("fetch again..",type(e))
             except requests.exceptions.ReadTimeout as e:
                 time.sleep(1)
-                print("fetch again..")
+                print("fetch again..",type(e))
             except Exception as e:
                 time.sleep(1)
-                print("fetch again..")
+                print("fetch again..",type(e))
 
-    return requests.get(url,params=params,headers=headers,impersonate="chrome",timeout=27.03,**args)
+    return requests.get(url,params=params,headers=headers,impersonate="chrome",timeout=timeout,**args)
 
 def keyword(
     f_search: str = None,
@@ -94,9 +98,9 @@ def next_view(sp: BeautifulSoup):
 # url:target_URL
 # parms:search_keyword
 def get_sp(url: str,params=None,encoding=None,direct=False)->BeautifulSoup:
-    # set encoding
     response=get_response(url,direct,params=params)
 
+    # set encoding
     if encoding:
         response.encoding=encoding
 

@@ -8,11 +8,7 @@ from typing import List
 from ehentai.conf import *
 from ehentai import __version__
 from ehentai import Page,Gallery,get_search,get_popular
-
-HOME=os.path.abspath(os.path.join(os.getenv('HOME'),".hentai"))
-
-if not os.path.exists(HOME):
-    os.makedirs(HOME)
+from ehentai.utils import save_json,load_json
 
 def echo_gl_table(detail=False,gl_table: List[Gallery]=None):
     if gl_table:
@@ -24,16 +20,6 @@ def echo_gl_table(detail=False,gl_table: List[Gallery]=None):
                 echo(f"{i:^3}{FONT_STYLE.bold.value}{CATS_BG_COLOR[gl.cat]}{gl.cat:^12}{RESET}{gl.name}")
     else:
         echo("Page's Gallery Table is None.")
-
-
-def save_json(filename: str,data: object):
-    with open(os.path.join(HOME,filename),"w") as f:
-        f.write(json.dumps(data,default=lambda obj:obj.__dict__))
-def load_json(filename: str,data_type):
-    with open(os.path.join(HOME,filename),"r") as f:
-        return data_type(**json.loads(f.read()))
-
-page: Page
 
 
 @click.group()
