@@ -7,6 +7,7 @@ requires=[
     "curl_cffi",
     "beautifulsoup4",
     "lxml",
+    "pillow"
 ]
 
 about={}

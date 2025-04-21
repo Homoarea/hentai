@@ -1,6 +1,3 @@
-import sys
-import os
-import json
 import click
 import json
 from click import echo
@@ -8,7 +5,7 @@ from typing import List
 from ehentai.conf import *
 from ehentai import __version__
 from ehentai import Page,Gallery,get_search,get_popular
-from ehentai.utils import save_json,load_json
+from ehentai.utils import save_Page,load_Page
 
 def echo_gl_table(detail=False,gl_table: List[Gallery]=None):
     if gl_table:
@@ -21,6 +18,11 @@ def echo_gl_table(detail=False,gl_table: List[Gallery]=None):
     else:
         echo("Page's Gallery Table is None.")
 
+def echo_gl_comment(comment):
+    for nick,cs in comment:
+                echo(f"{FONT_STYLE.bold.value}{FONT_COLOR.green.value}{nick}{RESET}")
+                for c in cs:
+                    echo(f"\t{c}")
 
 @click.group()
 def cli():
@@ -38,21 +40,20 @@ def version():
     echo(f"Version: {__version__.__version__}")
     
 @cli.command(help="|search from e-hentai")
-@click.option('--search-content','-s',default="",type=str,prompt=True,help="search content,tags")
+@click.argument('search-content',default="")
 @click.option('--cats','-c',default=255,type=int,help="Doujinshi,Manga...")
 @click.option('--rating','-r',default=None,type=int,help="the minium rating")
 @click.option('--show-expunged/--no-show-expunged','-sh/',default=False,help="show the removed galleries")
 @click.option('--show-torrent/--no-show-torrent','-sto/',default=False,help="filter galleries have torrent")
-@click.option('--use-direct/--no-direct','-u',default=False,help="enable this to connect directly")
-def search(search_content,cats,rating,show_expunged,show_torrent,use_direct):
-    page=get_search(search_content,cats,rating,show_expunged,show_torrent,direct=use_direct)
-    save_json("page.json",page)
+def search(search_content,cats,rating,show_expunged,show_torrent):
+    page=get_search(search_content,cats,rating,show_expunged,show_torrent)
+    save_Page(page)
     print(page)
 
 @cli.command(help="|show the fetched galleries")
 @click.option("--detailed/--no-detailed", "-d/", default=False)
 def list(detailed):
-    page=load_json("page.json",Page)
+    page=load_Page()
     echo_gl_table(detailed,page.gl_table)
 
 @cli.command(help="|show and operate the gallery")
@@ -63,7 +64,7 @@ def list(detailed):
 @click.option('--stream/--no-stream','-s/',default=True,type=bool,help="enable stream download")
 @click.option('--comment/--no-comment', '-c/',default=False,help="echo the comment of gallery")
 def view(id,download,rename,path,stream,comment):
-    page=load_json("page.json",Page)
+    page=load_Page()
     gl=page.gl_table[id]
     echo(gl)
     if download:
@@ -71,19 +72,15 @@ def view(id,download,rename,path,stream,comment):
     elif comment:
         comment=gl.comment()
         if comment:
-            for nick,cs in comment:
-                echo(f"{FONT_STYLE.bold.value}{FONT_COLOR.green.value}{nick}{RESET}")
-                for c in cs:
-                    echo(f"\t{c}")
+            echo_gl_comment(comment)
         else:
             echo("no comments")
     
 @cli.command(help="|fetch popular galleries")
-@click.option('--use-direct/--no-direct','-u',default=False,help="enable this to connect directly")
-def popular(use_direct):
-    page=get_popular(direct=use_direct)
+def popular():
+    page=get_popular()
     echo(f"Currently Popular Recent Galleries:{len(page.gl_table)}")
-    save_json("page.json",page)
+    save_Page(page)
 
 # testing
 # @cli.command()

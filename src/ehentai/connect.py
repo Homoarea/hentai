@@ -69,7 +69,7 @@ def keyword(
     # search_kw
     kw["f_search"]=f_search
     # category
-    if f_cats or cats_list:kw["f_cats"]=get_f_cats(f_cats,cats_list),
+    kw["f_cats"]=get_f_cats(f_cats,cats_list),
     # advanced search
     # show advanced options
     if advsearch or f_sh or f_sto or f_spf or f_spt or f_srdd or f_sfl or f_sfu or f_sft:kw["advsearch"]=1
